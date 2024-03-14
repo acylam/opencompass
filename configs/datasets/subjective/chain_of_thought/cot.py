@@ -110,69 +110,33 @@ ref_score_prompt = list_prompt_template(
 
 # 针对<QuestionStart><QustionEnd>之间的问题，根据在<GuidelineStart><GuidelineEnd>之间定义的评估标准，对<AnswerStart><AnswerEnd>之间的回复进行评分，分数在<ScoreStart><ScoreEnd>之间，满分10分。
 
+# 现在你要扮演一个人类专家，对大模型模型在具体问题上的回复进行评价，请针对<QuestionStart><QustionEnd>之间的问题和<GuidelineStart><GuidelineEnd>之间的评估标准，对<AnswerStart><AnswerEnd>之间的回复进行评分。
+
+# 评分依据定义在<ResponseStart><ResponseEnd>之间。最终评分定义在<ScoreStart><ScoreEnd>之间，满分10分。
+
+# 现在你要扮演一个人类专家，对大模型模型在具体问题上的回复进行评价，请针对<QuestionStart><QustionEnd>之间的问题和<GuidelineStart><GuidelineEnd>之间的评估标准，对<AnswerStart><AnswerEnd>之间的回复进行评分，评分依据定义在<ResponseStart><ResponseEnd>之间。最终评分满分10分，定义在<ScoreStart><ScoreEnd>之间。
+
 # """
 dynamic_creative_judge_prompt = f"""
-现在你要扮演一个人类专家，对大模型模型在具体问题上的回复进行评价，请针对<QuestionStart><QustionEnd>之间的问题，完成以下 3 项任务：
-
-1. 针对<QuestionStart><QuestionEnd>之间的问题设计5条具体、清晰、明确且具有相关性的评估标准。请你在<GuidelineStart><GuidelineEnd>之间逐条列出你的评估标准。
-
-2. 针对<QuestionStart><QustionEnd>之间的问题，根据在<GuidelineStart><GuidelineEnd>之间定义的评估标准，对<AnswerStart><AnswerEnd>之间的回复进行评分，评分定义在<ResponseStart><ResponseEnd>之间。评分必须对每条评估标准给出依据。每个评分标准满分10分。
-
-3. 针对<ResponseStart><ResponseEnd>之间的评分，计算分数的总和，在<ScoreStart><ScoreEnd>之间给出总分，满分100分。
+现在你要扮演一个人类专家，对大模型模型在具体问题上的回复进行评价，请针对<QuestionStart><QustionEnd>之间的问题和<GuidelineStart><GuidelineEnd>之间的评价标准，对<AnswerStart><AnswerEnd>之间的回复进行评价，评价定义在<ResponseStart><ResponseEnd>之间。最终评分定义在<ScoreStart><ScoreEnd>之间，满分10分。
 
 <QuestionStart>
 {{question}}
 <QustionEnd>
 
-<GuidelineStart>
 {{guideline}}
-<GuidelineEnd>
 
 <AnswerStart>
 {{prediction}}
 <AnswerEnd>
 
+<ResponseStart>
+<ResponseEnd>
+
 <ScoreStart>
 最终评分：[评分]
 <ScoreEnd>
 """
-
-# {ref_guidlines_prompt}
-
-# {ref_response_prompt}
-
-# {ref_score_prompt}
-
-
-# <GuidelineStart>
-# <GuidelineEnd>
-
-# <ResponseStart>
-# <ResponseEnd>
-
-# <ScoreStart>
-# <ScoreEnd>
-
-# ref_guidlines_prompt = f"""
-# <ReferenceGuidelineStart>
-# {["1. 标准1：blahblahblah"]}
-# 2. 标准2：blahblahblah
-# 3. 标准3：blahblahblah
-# 4. 标准4：blahblahblah
-# 5. 标准5：blahblahblah
-# <ReferenceGuidelineEnd>
-# """
-# """
-# <ReferenceScoreStart>
-# 1. 标准1：[评分1]
-# 2. 标准2：[评分2]
-# 3. 标准3：[评分3]
-# 4. 标准4：[评分4]
-# 5. 标准5：[评分5]
-
-# 最终评分：[总评分]
-# <ReferenceScoreEnd>
-# """
 
 sub_map = dict(
     creationv2_zh=dynamic_creative_judge_prompt
