@@ -54,7 +54,7 @@ azure_gpt4 = dict(
     type=OpenAIAllesAPIN,
     url='http://ecs.sv.us.alles-apin.openxlab.org.cn/v1/openai/v2/text/chat',
     path='gpt-4-1106-preview',
-    os.getenv('ALLES_APIN_OPENAI_KEY'),
+    key=os.getenv('ALLES_APIN_OPENAI_KEY'),
     meta_template=api_meta_template,
     query_per_second=1,
     max_out_len=1024,
