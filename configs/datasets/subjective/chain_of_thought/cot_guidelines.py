@@ -31,8 +31,8 @@ You are an expert in large language model evaluation. Based on the question prov
 """
 
 sub_map = {
-    # "creationv2_zh": creation_zh_prompt,
-    "creationv2_en": creation_en_prompt,
+    "creationv2_zh": creation_zh_prompt,
+    # "creationv2_en": creation_en_prompt,
 }
 
 for _name, _prompt in sub_map.items():
@@ -42,7 +42,7 @@ for _name, _prompt in sub_map.items():
             template=dict(round=[
                 dict(
                     role='HUMAN',
-                    prompt=creation_en_prompt,
+                    prompt=creation_zh_prompt,
                 ),
             ]),
         ),

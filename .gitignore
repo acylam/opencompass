@@ -1,6 +1,7 @@
 
 output_*/
 outputs/
+*_bkup.py
 icl_inference_output/
 .vscode/
 tmp/
@@ -10,6 +11,7 @@ configs/secrets.py
 configs/datasets/log.json
 configs/eval_debug*.py
 configs/viz_*.py
+api_keys.sh
 data
 work_dirs
 models/*

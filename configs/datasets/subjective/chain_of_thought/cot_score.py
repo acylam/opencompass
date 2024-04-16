@@ -219,7 +219,7 @@ dynamic_creative_judge_prompt_zh = f"""
 {{prediction}}
 [回答结束]
 
-根据评分要求，给出你的最终打分，分数在 0.00 和 10.00 之间。你的输出应形如：
+根据评分要求，从10分满分开始，对回答中*每一项*不符合要求的内容*扣1分*，直到扣完为止。你的输出应形如：
 最终评分：[评分]
 原因：blahblahblah\n
 """
@@ -237,15 +237,15 @@ Please use the provided user question and evaluation criteria to score the corre
 {{prediction}}
 [End of Answer]
 
-Based on the evaluation criteria, score the answer between 0.00 and 10.00 (inclusive) and provide your reasoning. Your output should be in the form of:
+Based on the evaluation criteria, evaluate the answer by deducting scores from the maximum of 10.00 for any part of the answer that does not meet the criteria. Provide your reasoning. Your output should be in the form of:
 Score: [score]
 Reason: blahblah blahblah\n
 """
 
 sub_map = dict(
-    creationv2_zh=creation_prompt_zh,
+    # creationv2_zh=creation_prompt_zh,
     # creationv2_en=creation_prompt_en,
-    # creationv2_zh=dynamic_creative_judge_prompt_zh,
+    creationv2_zh=dynamic_creative_judge_prompt_zh,
     # creationv2_en=dynamic_creative_judge_prompt_en,
 )
 
@@ -267,7 +267,7 @@ for _name, _prompt in sub_map.items():
     subjective_eval_cfg = dict(
         evaluator=dict(
             type=LMEvaluator,
-            infer_order='double',
+            # infer_order='double',
             prompt_template=dict(
                 type=PromptTemplate,
                 template=dict(round=[

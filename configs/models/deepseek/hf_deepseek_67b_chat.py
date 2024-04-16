@@ -28,6 +28,11 @@ models = [
         max_seq_len=2048,
         batch_size=8,
         run_cfg=dict(num_gpus=4, num_procs=1),
+        generation_kwargs={
+            "eos_token_id": 100001,
+            "bos_token_id": 100000,
+            "pad_token_id": 100001,
+        },
         end_str='<｜end▁of▁sentence｜>',
     )
 ]

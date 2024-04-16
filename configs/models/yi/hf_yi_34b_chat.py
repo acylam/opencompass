@@ -23,7 +23,7 @@ models = [
             trust_remote_code=True,
         ),
         meta_template=_meta_template,
-        max_out_len=100,
+        max_out_len=100, # 2048
         max_seq_len=2048,
         batch_size=8,
         run_cfg=dict(num_gpus=4, num_procs=1),
