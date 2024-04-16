@@ -14,6 +14,7 @@ configs/viz_*.py
 api_keys.sh
 data
 work_dirs
+outputs
 models/*
 configs/internal/
 # Byte-compiled / optimized / DLL files
@@ -123,6 +124,7 @@ turbomind/
 *.txt
 *.jpg
 *.json
+*.jsonl
 *.csv
 *.npy
 *.c

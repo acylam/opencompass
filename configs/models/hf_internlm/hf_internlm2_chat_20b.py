@@ -32,5 +32,6 @@ models = [
         run_cfg=dict(num_gpus=2, num_procs=1),
         generation_kwargs={"eos_token_id": [2, 92542]},
         end_str='<|im_end|>',
+        generation_kwargs = {"eos_token_id": [2, 92542]},
     )
 ]
