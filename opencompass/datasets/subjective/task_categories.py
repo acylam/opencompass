@@ -1,7 +1,6 @@
 import json
 import os.path as osp
 from textwrap import dedent
-# from typing import Dict
 
 from datasets import Dataset, DatasetDict
 
@@ -9,6 +8,8 @@ from opencompass.registry import LOAD_DATASET
 
 # from .subjective_cmp import SubjectiveCmpDataset
 from ..base import BaseDataset
+
+# from typing import Dict
 
 
 @LOAD_DATASET.register_module()
