@@ -1,5 +1,4 @@
-import os
-# from os import getenv as gv
+from os import getenv as gv
 # from opencompass.models import HuggingFaceCausalLM
 from mmengine.config import read_base
 
@@ -56,7 +55,7 @@ azure_gpt4 = dict(
     type=OpenAIAllesAPIN,
     url='http://ecs.sv.us.alles-apin.openxlab.org.cn/v1/openai/v2/text/chat',
     path='gpt-4-1106-preview',
-    key=os.getenv('ALLES_APIN_OPENAI_KEY'),
+    key=gv('ALLES_APIN_OPENAI_KEY'),
     meta_template=api_meta_template,
     query_per_second=1,
     max_out_len=1024,
@@ -71,7 +70,7 @@ glm4_notools = dict(
     abbr="glm4_notools",
     type=ZhiPuV2AI,
     path="glm-4",
-    key=os.getenv('ZHIPU_API_KEY'),
+    key=gv('ZHIPU_API_KEY'),
     generation_kwargs={
         "tools": [{
                 "type": "web_search", 
@@ -91,7 +90,7 @@ qwen_max = dict(
     retry=10,
     type=Qwen,
     path='qwen-max',
-    key=os.getenv('QWEN_API_KEY'), # please give your key
+    key=gv('QWEN_API_KEY'), # please give your key
     generation_kwargs={
         'enable_search': False,
     },
@@ -107,8 +106,8 @@ erniebot_pro = dict(
     type=ERNIEBot,
     path='erniebot_pro',
     retry=5,
-    key=os.getenv('ERNIEBOT_API_KEY'),
-    secretkey=os.getenv('ERNIEBOT_SECRET_KEY'),
+    key=gv('ERNIEBOT_API_KEY'),
+    secretkey=gv('ERNIEBOT_SECRET_KEY'),
     url='https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=',
     meta_template=api_meta_template,
     query_per_second=1,
@@ -195,7 +194,7 @@ infer = dict(
 #     type=OpenAIAllesAPIN,
 #     url='http://ecs.sv.us.alles-apin.openxlab.org.cn/v1/openai/v2/text/chat',
 #     path='gpt-4-1106-preview',
-#     key=os.getenv('ALLES_APIN_OPENAI_KEY'),
+#     key=gv('ALLES_APIN_OPENAI_KEY'),
 #     meta_template=api_meta_template,
 #     query_per_second=1,
 #     max_out_len=1024,

@@ -10,8 +10,8 @@ conda activate opencompass
 python run.py ../configs/infer_subj_cot_guidelines.py \
     --mode infer \
     --reuse latest \
-    --work-dir ../outputs/infer_subj_cot_guidelines/ 
-    # --debug 
+    --work-dir ../outputs/infer_subj_cot_guidelines/
+    # --debug
     # --dry-run \
     # --debug \
     # --mode infer \

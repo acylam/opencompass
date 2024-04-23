@@ -8,3 +8,4 @@ from .mtbench import MTBenchDataset  # noqa: F401, F403
 from .multiround import MultiroundDataset  # noqa: F401, F403
 from .subjective_cmp import SubjectiveCmpDataset  # noqa: F401, F403
 from .task_categories import TaskCategoriesDataset
+from .task_difficulties import TaskDifficultiesDataset

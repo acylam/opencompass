@@ -7,11 +7,11 @@ export TRANSFORMERS_CACHE=/mnt/petrelfs/share_data/zhoufengzhe/model_weights/hf_
 cd ~/projects/opencompass
 conda activate opencompass
 
-python run.py ../configs/eval_subj_compass_arena_glm4.py \
-    --mode eval \
+python run.py ../configs/infer_subj_gpt4.py \
+    --mode infer \
     --reuse latest \
-    --work-dir ../outputs/subj_compass_arena_glm4/
-    # --debug \
+    --work-dir ../outputs/infer_subj_gpt4/
+    # --debug
     # --dry-run \
     # --debug \
     # --mode infer \

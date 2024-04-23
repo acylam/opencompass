@@ -1,17 +1,18 @@
-from textwrap import dedent
+# from textwrap import dedent
 
+from opencompass.datasets import TaskCategoriesDataset, TaskDifficultiesDataset
+from opencompass.openicl.icl_evaluator import LMEvaluator
+from opencompass.openicl.icl_inferencer import GenInferencer
 from opencompass.openicl.icl_prompt_template import PromptTemplate
 from opencompass.openicl.icl_retriever import ZeroRetriever
-from opencompass.openicl.icl_inferencer import GenInferencer
-from opencompass.openicl.icl_evaluator import LMEvaluator
-from opencompass.datasets import LLMCategoriesDataset
 
 subjective_reader_cfg = dict(
-    input_columns=['category', 'definition', 'ref_or_not', 'prompt'],
+    # input_columns=['category', 'definition', 'ref_or_not', 'prompt'],
+    input_columns=['prompt'],
     output_column='judge',
-    )
+)
 
-data_path = "/mnt/petrelfs/linjunyao/projects/opencompass/tmp_work/data/"
+data_path = '/mnt/petrelfs/linjunyao/projects/opencompass/tmp_work/data/'
 
 subjective_datasets = []
 
@@ -50,7 +51,7 @@ subjective_datasets = []
 # 4.制造的{num_levels}个难度标准需要按从易到难进行出题，随着难度等级上升而提高复杂度
 # 5.制造的example instruction一定要包含当前等级的所有难度标准项，且字数不能少于{instruction_length}字
 # 6.制造的example instruction不能提供可选答案
-# 7.制造的难度标准和example instruction要按照一定的格式进行回复，即在每个难度级别后面需要给出对应的{num_criteria}个难度标准、{num_instructions}个example instruction和涉及的reference text: 
+# 7.制造的难度标准和example instruction要按照一定的格式进行回复，即在每个难度级别后面需要给出对应的{num_criteria}个难度标准、{num_instructions}个example instruction和涉及的reference text:
 # ```
 # {level_template}
 # ```
@@ -61,7 +62,7 @@ subjective_datasets = []
 # 下面请你遵照给出的要求，用中文生成属于[{category}]的{num_levels}个instruction难度级别、对应的{num_criteria}个难度标准和{num_instructions}个example instruction:
 # """
 
-zh_prompt = "{prompt}"
+zh_prompt = '{prompt}'
 print(zh_prompt)
 
 # 3.制造的instruction具有创造性，能想象不同场景、不同功能的instruction
@@ -75,7 +76,7 @@ print(zh_prompt)
 # 3.制造的难度标准应该尽量详细，并且具有创造性，能想象不同场景、不同功能的难度标准
 # 4.制造的5个难度级别需要彼此之间尽量有区分度
 # 5.制造的5个难度级别需要按从易到难进行出题
-# 6.制造的难度级别和难度标准要按照一定的格式进行回复，即在每个难度级别后面需要给出对应的5个难度标准和问题示例: 
+# 6.制造的难度级别和难度标准要按照一定的格式进行回复，即在每个难度级别后面需要给出对应的5个难度标准和问题示例:
 # ```
 # [level1_description_start] <Your difficulty description here> [level1_description_end]
 # [level1_criteria_start] <Your criteria here> [level1_criteria_end]
@@ -103,7 +104,6 @@ print(zh_prompt)
 # 下面请你遵照给出的要求，生成属于[创意性写作]的5个难度级别和对应的难度标准和问题示例:
 # """
 
-
 # zh_prompt = """
 # 你是一个LLM评测专家，你需要设计大模型评测问题的难度级别和对应的评测标准，根据我给出的一个“特定类别”来制造5个难度级别，每个级别制造5个评测标准。
 # 你制造的难度级别和评测标准必须符合以下要求：
@@ -112,7 +112,7 @@ print(zh_prompt)
 # 3.制造的评测标准应该尽量详细，并且具有创造性，能想象不同场景、不同功能的评测标准
 # 4.制造的5个难度级别需要彼此之间尽量有区分度
 # 5.制造的5个难度级别需要按从易到难进行出题
-# 6.制造的难度级别和评测标准要按照一定的格式进行回复，即在每个难度级别后面需要给出对应的5个评测标准: 
+# 6.制造的难度级别和评测标准要按照一定的格式进行回复，即在每个难度级别后面需要给出对应的5个评测标准:
 # ```
 # [level1_description_start] <Your question difficulty description here> [level1_description_end]
 # [level1_guidelines_start] <Your guidelines here> [level1_guidelines_end]
@@ -144,7 +144,7 @@ print(zh_prompt)
 # 4.制造的5个question需要彼此之间尽量多样化
 # 5.制造的5个question需要按从易到难的5个难度级别进行出题
 # 6.制造的question必须合理，是人类口吻会问出的问题
-# 7.制造的question要按照一定的格式进行回复，即在每个question后面需要给出它的难度等级和描述: 
+# 7.制造的question要按照一定的格式进行回复，即在每个question后面需要给出它的难度等级和描述:
 # ```
 # [question1_start] <Your question here> [question1_end][Level1]
 # [question2_start] <Your question here> [question2_end][Level2]
@@ -182,7 +182,6 @@ print(zh_prompt)
 # Now, please generate five questions for the [{category}]:
 # """
 
-
 # zh_prompt = """
 # 你是一个评测question制造专家，你需要制造出人类可能会对模型提出的问题，根据我给出的一个“特定类别”和“题目示例”来制造5个question，并且这5个question应该有难易区别。
 # 你制造的question必须符合以下要求：
@@ -192,7 +191,7 @@ print(zh_prompt)
 # 4.制造的5个question需要彼此之间尽量多样化
 # 5.制造的5个question需要按从易到难的5个难度级别进行出题
 # 6.制造的question必须合理，是人类口吻会问出的问题
-# 7.制造的question要按照一定的格式进行回复，即在每个question后面需要给出它的难度评级: 
+# 7.制造的question要按照一定的格式进行回复，即在每个question后面需要给出它的难度评级:
 # ```
 # [question1_start] <Your question here> [question1_end][Level1]
 # [question2_start] <Your question here> [question2_end][Level2]
@@ -232,27 +231,28 @@ print(zh_prompt)
 # Now, please generate five questions for the [{category}]:
 # """
 
-
 sub_map = {
-    "llm_tasks_w_def_full_zh": zh_prompt,
+    # "llm_tasks_w_def_full_zh": zh_prompt,
+    # "llm_tasks_w_def_full_en": zh_prompt,
+    'task_difficulties_zh': zh_prompt,
+    # "task_difficulties_en": zh_prompt,
 }
 
 for _name, _prompt in sub_map.items():
     subjective_infer_cfg = dict(
-            prompt_template=dict(
-                type=PromptTemplate,
-                template=dict(round=[
-                    dict(
-                        role='HUMAN',
-                        prompt=_prompt
-                    ),
-                ]),
-            ),
-            retriever=dict(type=ZeroRetriever),
-            inferencer=dict(type=GenInferencer, max_seq_len=4096, 
-            max_out_len=2048, # set as 1024 for yi models
-            ),
-        )
+        prompt_template=dict(
+            type=PromptTemplate,
+            template=dict(round=[
+                dict(role='HUMAN', prompt=_prompt),
+            ]),
+        ),
+        retriever=dict(type=ZeroRetriever),
+        inferencer=dict(
+            type=GenInferencer,
+            max_seq_len=4096,
+            max_out_len=2048,  # set as 1024 for yi models
+        ),
+    )
 
     subjective_eval_cfg = dict(
         evaluator=dict(
@@ -261,23 +261,20 @@ for _name, _prompt in sub_map.items():
             prompt_template=dict(
                 type=PromptTemplate,
                 template=dict(round=[
-                    dict(
-                        role='HUMAN',
-                        prompt = _prompt
-                    ),
+                    dict(role='HUMAN', prompt=_prompt),
                 ]),
             ),
         ),
-        pred_role="BOT",
+        pred_role='BOT',
     )
 
     subjective_datasets.append(
         dict(
-            abbr=f"{_name}",
-            type=LLMCategoriesDataset,
+            abbr=f'{_name}',
+            # type=TaskCategoriesDataset,
+            type=TaskDifficultiesDataset,
             path=data_path,
             name=_name,
             reader_cfg=subjective_reader_cfg,
             infer_cfg=subjective_infer_cfg,
-            eval_cfg=subjective_eval_cfg
-        ))
+            eval_cfg=subjective_eval_cfg))

@@ -2,16 +2,19 @@
 export HF_EVALUATE_OFFLINE=1
 export HF_DATASETS_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
-export TRANSFORMERS_CACHE=/mnt/petrelfs/share_data/zhoufengzhe/model_weights/hf_hub/
+# export TRANSFORMERS_CACHE=/mnt/petrelfs/share_data/zhoufengzhe/model_weights/hf_hub/
+export TRANSFORMERS_CACHE=/mnt/petrelfs/share_data/basemodel/checkpoints/llm/hf_hub
 
 cd ~/projects/opencompass
 conda activate opencompass
 
-python run.py ../configs/infer_subj_gpt4.py \
-    --mode infer \
+source /mnt/petrelfs/linjunyao/projects/opencompass/scripts/api_keys.sh
+
+python run.py /mnt/petrelfs/linjunyao/projects/opencompass/configs/eval_subj_compass_arena_glm4.py \
+    --mode eval \
     --reuse latest \
-    --work-dir ../outputs/infer_subj_gpt4/ 
-    # --debug 
+    --work-dir /mnt/petrelfs/linjunyao/projects/opencompass/outputs/subj_compass_arena_glm4/
+    # --debug \
     # --dry-run \
     # --debug \
     # --mode infer \

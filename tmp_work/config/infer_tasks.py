@@ -1,5 +1,5 @@
-import os
-# from os import getenv as gv
+from os import getenv as gv
+
 # from opencompass.models import HuggingFaceCausalLM
 from mmengine.config import read_base
 
@@ -21,18 +21,17 @@ with read_base():
     # # yi
     # from .models.yi.hf_yi_34b_chat import models as yi_34b_chat
 
-
-from opencompass.models import HuggingFaceCausalLM, HuggingFace, HuggingFaceChatGLM3, OpenAI, ZhiPuV2AI, Qwen, ERNIEBot
+from opencompass.models import (  # HuggingFace,; HuggingFaceCausalLM,; HuggingFaceChatGLM3,; OpenAI,
+    ERNIEBot, Qwen, ZhiPuV2AI)
 from opencompass.models.openai_api import OpenAIAllesAPIN
-from opencompass.partitioners import NaivePartitioner, SizePartitioner
-from opencompass.partitioners.sub_naive import SubjectiveNaivePartitioner
-from opencompass.partitioners.sub_size import SubjectiveSizePartitioner
-from opencompass.runners import LocalRunner
-from opencompass.runners import SlurmSequentialRunner
+from opencompass.partitioners import SizePartitioner  # NaivePartitioner,
+# from opencompass.partitioners.sub_naive import SubjectiveNaivePartitioner
+# from opencompass.partitioners.sub_size import SubjectiveSizePartitioner
+from opencompass.runners import SlurmSequentialRunner  # LocalRunner,
+# from opencompass.summarizers import CompassArenaSummarizer
 from opencompass.tasks import OpenICLInferTask
-from opencompass.tasks.subjective_eval import SubjectiveEvalTask
-from opencompass.summarizers import CompassArenaSummarizer
 
+# from opencompass.tasks.subjective_eval import SubjectiveEvalTask
 
 api_meta_template = dict(
     round=[
@@ -44,9 +43,7 @@ api_meta_template = dict(
 
 # -------------Inference Stage ----------------------------------------
 
-datasets = [
-    *subjective_datasets
-]
+datasets = [*subjective_datasets]
 
 azure_gpt4 = dict(
     abbr='azure-gpt4-turbo',
@@ -54,26 +51,28 @@ azure_gpt4 = dict(
     type=OpenAIAllesAPIN,
     url='http://ecs.sv.us.alles-apin.openxlab.org.cn/v1/openai/v2/text/chat',
     path='gpt-4-1106-preview',
-    key=os.getenv('ALLES_APIN_OPENAI_KEY'),
+    key=gv('ALLES_APIN_OPENAI_KEY'),
     meta_template=api_meta_template,
     query_per_second=1,
     max_out_len=1024,
     max_seq_len=4096,
     # max_seq_len=2048,
-    batch_size=8,
+    batch_size=4,
     retry=20,
-    temperature=0.85, # more creative for inference
+    temperature=0.85,  # more creative for inference
 )
 
 glm4_notools = dict(
-    abbr="glm4_notools",
+    abbr='glm4_notools',
     type=ZhiPuV2AI,
-    path="glm-4",
-    key=os.getenv('ZHIPU_API_KEY'),
+    path='glm-4',
+    key=gv('ZHIPU_API_KEY'),
     generation_kwargs={
-        "tools": [{
-                "type": "web_search", 
-                "web_search": {"enable": False}
+        'tools': [{
+            'type': 'web_search',
+            'web_search': {
+                'enable': False
+            }
         }]
     },
     meta_template=api_meta_template,
@@ -89,7 +88,7 @@ qwen_max = dict(
     retry=10,
     type=Qwen,
     path='qwen-max',
-    key=os.getenv('QWEN_API_KEY'), # please give your key
+    key=gv('QWEN_API_KEY'),  # please give your key
     generation_kwargs={
         'enable_search': False,
     },
@@ -97,27 +96,26 @@ qwen_max = dict(
     query_per_second=1,
     max_out_len=2048,
     max_seq_len=2048,
-    batch_size=8
-)
+    batch_size=8)
 
 erniebot_pro = dict(
-    abbr='erniebot_pro', # 4.0
+    abbr='erniebot_pro',  # 4.0
     type=ERNIEBot,
     path='erniebot_pro',
     retry=5,
-    key=os.getenv('ERNIEBOT_API_KEY'),
-    secretkey=os.getenv('ERNIEBOT_SECRET_KEY'),
-    url='https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=',
+    key=gv('ERNIEBOT_API_KEY'),
+    secretkey=gv('ERNIEBOT_SECRET_KEY'),
+    url=
+    'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=',
     meta_template=api_meta_template,
     query_per_second=1,
     max_out_len=2048,
     max_seq_len=2048,
-    batch_size=4
-)
+    batch_size=4)
 
 hf_models = [
     # *internlm2_7b_chat,
-    # *internlm2_20b_chat, 
+    # *internlm2_20b_chat,
     # *qwen2_7b_chat,
     # *qwen2_14b_chat,
     # *qwen2_72b_chat,
@@ -127,8 +125,8 @@ hf_models = [
 
 # Add additional models from predictions
 api_models = [
-    azure_gpt4,
-    # glm4_notools,
+    # azure_gpt4,
+    glm4_notools,
     # qwen_max,
     # erniebot_pro,
 ]
@@ -141,10 +139,13 @@ for mdl in hf_models:
 models.extend(api_models)
 
 infer = dict(
-    partitioner=dict(type=SizePartitioner, strategy='split', max_task_size=10000),
+    partitioner=dict(type=SizePartitioner,
+                     strategy='split',
+                     max_task_size=10000),
     runner=dict(
-        partition='llm_dev2',
-        quotatype='reserved',
+        partition='llmeval',
+        # partition='llm_dev2',
+        quotatype='auto',
         type=SlurmSequentialRunner,
         task=dict(type=OpenICLInferTask),  # Task to be run
         max_num_workers=256,  # Maximum concurrent evaluation task count
@@ -152,4 +153,4 @@ infer = dict(
     ),
 )
 
-workdir = "/mnt/petrelfs/linjunyao/projects/opencompass/tmp_work/outputs/infer_tasks"
+workdir = '/mnt/petrelfs/linjunyao/projects/opencompass/tmp_work/outputs/infer_tasks'
