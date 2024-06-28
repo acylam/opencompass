@@ -22,11 +22,40 @@ class BPCEvaluator(BaseEvaluator):
         Returns:
             Dict[str, float]: Bits per Character
         """
-        total_loss = sum(loss)
-
         # Multiplying by log(2) to correct for the constant shift
         # due to natural log used in the PyTorch implementation
         # of CrossEntropyLoss
-        bpc = total_loss / (total_chr_num[0] * np.log(2))
+        bpc = sum(loss) / (total_chr_num[0] * np.log(2))
+        ppl = 2**bpc
 
-        return {'bpc': bpc}
+        return {
+            'bpc': bpc,
+            'ppl': ppl,
+        }
+
+
+@ICL_EVALUATORS.register_module()
+class CompressionEvaluator(BaseEvaluator):
+
+    def score(self, loss: List[float], total_chr_num: List[float]):
+        """Calculate bits per character based on inference results.
+
+        Args:
+            loss (List[float]): CrossEntropyLoss per batch x sliding
+            context window
+            total_chr_num (List[float]): Total number of characters
+            in the original dataset.
+
+        Returns:
+            Dict[str, float]: Bits per Character
+        """
+        # Multiplying by log(2) to correct for the constant shift
+        # due to natural log used in the PyTorch implementation
+        # of CrossEntropyLoss
+        bpc = sum(loss) / (total_chr_num[0] * np.log(2))
+        ppl = 2**bpc
+
+        return {
+            'bpc': bpc,
+            'ppl': ppl,
+        }

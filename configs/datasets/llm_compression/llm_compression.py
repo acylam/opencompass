@@ -1,7 +1,7 @@
 from opencompass.openicl.icl_prompt_template import PromptTemplate
 from opencompass.openicl.icl_retriever import ZeroRetriever
 from opencompass.openicl.icl_inferencer import SWCELossInferencer
-from opencompass.openicl.icl_evaluator import BPCEvaluator
+from opencompass.openicl.icl_evaluator import BPCEvaluator, CompressionEvaluator
 from opencompass.datasets import LLMCompressionDataset
 
 
@@ -30,7 +30,8 @@ for _name in subset_mapping.keys():
     )
 
     # Calculates Bits per Character (BPC) based on the CE loss from the inference stage
-    llm_cmp_eval_cfg = dict(evaluator=dict(type=BPCEvaluator))
+    # llm_cmp_eval_cfg = dict(evaluator=dict(type=BPCEvaluator))
+    llm_cmp_eval_cfg = dict(evaluator=dict(type=CompressionEvaluator))
 
     llm_compression_datasets.append(
         dict(
